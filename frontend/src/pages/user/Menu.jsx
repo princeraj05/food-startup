@@ -1,5 +1,5 @@
 // ================= FRONTEND =================
-// ✅ src/pages/user/Menu.jsx (SEARCH FEATURE ADDED – UI SAME)
+// src/pages/user/Menu.jsx (SEARCH FEATURE ADDED – UI SAME)
 
 import { useEffect, useState } from "react";
 
@@ -8,7 +8,7 @@ export default function Menu() {
   const [search, setSearch] = useState(""); // 🔍 NEW
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/foods")
+    fetch("https://food-startup-1.onrender.com/api/foods")
       .then((res) => res.json())
       .then((data) => setFoods(data));
   }, []);
@@ -60,7 +60,7 @@ export default function Menu() {
           filteredFoods.map((food) => (
             <div key={food._id} style={card}>
               <img
-                src={`http://localhost:5000/uploads/${food.image}`}
+                src={`https://food-startup-1.onrender.com/uploads/${food.image}`}
                 alt={food.name}
                 style={img}
               />
