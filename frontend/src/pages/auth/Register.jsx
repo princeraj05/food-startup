@@ -33,13 +33,11 @@ export default function Register() {
         return alert(data.message || "Registration failed");
       }
 
-      alert("✅ Registration Successful!");
+      alert("Registration Successful!");
       navigate("/login");
 
     }catch(err){
-
-      alert("Registration failed: "+err.message);
-
+      alert("Registration failed");
     }
 
   };
@@ -88,8 +86,6 @@ export default function Register() {
     </div>
   );
 }
-
-/* ================= STYLES ================= */
 
 const page={
   minHeight:"100vh",
