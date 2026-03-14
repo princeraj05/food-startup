@@ -3,24 +3,22 @@ import { useNavigate, Link } from "react-router-dom";
 
 export default function Login() {
 
-const [email,setEmail] = useState("");
-const [password,setPassword] = useState("");
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
 
 const navigate = useNavigate();
 
 const handleLogin = async (e) => {
-
-```
 e.preventDefault();
 
-try{
-
-  const res = await fetch("https://food-startup-1.onrender.com/api/users/login",{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json"
+```
+try {
+  const res = await fetch("https://food-startup-1.onrender.com/api/users/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
     },
-    body:JSON.stringify({
+    body: JSON.stringify({
       email,
       password
     })
@@ -28,15 +26,20 @@ try{
 
   const data = await res.json();
 
-  if(!res.ok){
-    return alert(data.message || "Login failed");
+  if (!res.ok) {
+    alert(data.message || "Login failed");
+    return;
   }
 
-  localStorage.setItem("token",data.token);
+  localStorage.setItem("token", data.token);
 
-  navigate(data.role==="admin"?"/admin":"/user");
+  if (data.role === "admin") {
+    navigate("/admin");
+  } else {
+    navigate("/user");
+  }
 
-}catch(err){
+} catch (err) {
   alert("Login failed");
 }
 ```
@@ -54,7 +57,7 @@ return ( <div style={page}> <form style={card} onSubmit={handleLogin}>
       placeholder="Email"
       value={email}
       required
-      onChange={(e)=>setEmail(e.target.value)}
+      onChange={(e) => setEmail(e.target.value)}
     />
 
     <input
@@ -63,7 +66,7 @@ return ( <div style={page}> <form style={card} onSubmit={handleLogin}>
       placeholder="Password"
       value={password}
       required
-      onChange={(e)=>setPassword(e.target.value)}
+      onChange={(e) => setPassword(e.target.value)}
     />
 
     <button style={btn} type="submit">
@@ -83,50 +86,50 @@ return ( <div style={page}> <form style={card} onSubmit={handleLogin}>
 
 /* ===== STYLES ===== */
 
-const page={
-minHeight:"100vh",
-display:"flex",
-justifyContent:"center",
-alignItems:"center"
+const page = {
+minHeight: "100vh",
+display: "flex",
+justifyContent: "center",
+alignItems: "center"
 };
 
-const card={
-width:360,
-padding:32,
-borderRadius:14,
-background:"#ffffff",
-boxShadow:"0 12px 30px rgba(0,0,0,0.15)"
+const card = {
+width: 360,
+padding: 32,
+borderRadius: 14,
+background: "#ffffff",
+boxShadow: "0 12px 30px rgba(0,0,0,0.15)"
 };
 
-const title={
-textAlign:"center",
-marginBottom:20,
-color:"#111827",
-fontWeight:600
+const title = {
+textAlign: "center",
+marginBottom: 20,
+color: "#111827",
+fontWeight: 600
 };
 
-const input={
-width:"100%",
-padding:12,
-marginBottom:12,
-borderRadius:8,
-border:"1px solid #d1d5db",
-fontSize:14
+const input = {
+width: "100%",
+padding: 12,
+marginBottom: 12,
+borderRadius: 8,
+border: "1px solid #d1d5db",
+fontSize: 14
 };
 
-const btn={
-width:"100%",
-padding:12,
-borderRadius:8,
-border:"none",
-cursor:"pointer",
-fontWeight:"bold",
-background:"#111827",
-color:"#ffffff"
+const btn = {
+width: "100%",
+padding: 12,
+borderRadius: 8,
+border: "none",
+cursor: "pointer",
+fontWeight: "bold",
+background: "#111827",
+color: "#ffffff"
 };
 
-const text={
-marginTop:12,
-textAlign:"center",
-color:"#374151"
+const text = {
+marginTop: 12,
+textAlign: "center",
+color: "#374151"
 };
