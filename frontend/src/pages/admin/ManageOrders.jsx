@@ -1,6 +1,3 @@
-// ================= FRONTEND =================
-// ✅ src/pages/admin/ManageOrders.jsx (ONLY UI / STYLING UPDATED)
-
 import { useEffect, useState } from "react";
 import { getToken } from "../../utils/getToken";
 
@@ -16,7 +13,7 @@ export default function ManageOrders() {
 
   const loadOrders = async () => {
     const token = await getToken();
-    const res = await fetch("http://localhost:5000/api/orders", {
+    const res = await fetch("https://food-startup-1.onrender.com/api/orders", {
       headers: { Authorization: `Bearer ${token}` },
     });
     setOrders(await res.json());
@@ -24,7 +21,7 @@ export default function ManageOrders() {
 
   const setETA = async (id, status) => {
     const token = await getToken();
-    await fetch(`http://localhost:5000/api/orders/${id}/status`, {
+    await fetch(`https://food-startup-1.onrender.com/api/orders/${id}/status`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -67,7 +64,6 @@ export default function ManageOrders() {
 
       {orders.map((o) => (
         <div key={o._id} style={card}>
-          {/* HEADER */}
           <div style={top}>
             <h3 style={{ margin: 0 }}>Order #{o._id.slice(-6)}</h3>
             <select
@@ -81,7 +77,6 @@ export default function ManageOrders() {
             </select>
           </div>
 
-          {/* STATUS */}
           <span
             style={{
               ...statusBadge,
@@ -99,7 +94,6 @@ export default function ManageOrders() {
             ⏱ Remaining: <b>{remaining(o)}</b>
           </p>
 
-          {/* ETA INPUT */}
           {o.status !== "Delivered" && (
             <div style={etaBox}>
               <input
@@ -117,12 +111,11 @@ export default function ManageOrders() {
             </div>
           )}
 
-          {/* ITEMS */}
           <div style={itemsBox}>
             {o.items.map((i, idx) => (
               <div key={idx} style={row}>
                 <img
-                  src={`http://localhost:5000/uploads/${i.image}`}
+                  src={`https://food-startup-1.onrender.com/uploads/${i.image}`}
                   alt={i.name}
                   style={img}
                   onError={(e) => (e.target.style.display = "none")}
@@ -141,107 +134,3 @@ export default function ManageOrders() {
     </div>
   );
 }
-
-/* ================= STYLES ================= */
-
-const page = {
-  padding: 40,
-  background: "#f1f5f9",
-  minHeight: "100vh",
-};
-
-const title = {
-  marginBottom: 30,
-  color: "#0f172a",
-};
-
-const card = {
-  background: "#ffffff",
-  padding: 24,
-  borderRadius: 18,
-  marginBottom: 24,
-  maxWidth: 900,
-  boxShadow:
-    "rgba(0, 0, 0, 0.1) 0px 10px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px",
-};
-
-const top = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  marginBottom: 10,
-};
-
-const select = {
-  padding: "6px 10px",
-  borderRadius: 8,
-  border: "1px solid #cbd5e1",
-  fontWeight: 600,
-};
-
-const statusBadge = {
-  display: "inline-block",
-  padding: "6px 16px",
-  borderRadius: 20,
-  color: "#fff",
-  fontWeight: 600,
-  marginBottom: 10,
-};
-
-const text = {
-  margin: "8px 0",
-  color: "#334155",
-};
-
-const etaText = {
-  margin: "6px 0 14px",
-  color: "#0f172a",
-};
-
-const etaBox = {
-  display: "flex",
-  gap: 10,
-  marginBottom: 16,
-};
-
-const etaInputStyle = {
-  flex: 1,
-  padding: 10,
-  borderRadius: 10,
-  border: "1px solid #cbd5e1",
-};
-
-const etaBtn = {
-  padding: "10px 16px",
-  borderRadius: 10,
-  border: "none",
-  cursor: "pointer",
-  background: "#2563eb",
-  color: "#fff",
-  fontWeight: 600,
-};
-
-const itemsBox = {
-  borderTop: "1px solid #e5e7eb",
-  paddingTop: 12,
-};
-
-const row = {
-  display: "flex",
-  alignItems: "center",
-  gap: 12,
-  marginBottom: 8,
-};
-
-const img = {
-  width: 60,
-  height: 60,
-  borderRadius: 10,
-  objectFit: "cover",
-};
-
-const total = {
-  marginTop: 12,
-  textAlign: "right",
-  color: "#14532d",
-};

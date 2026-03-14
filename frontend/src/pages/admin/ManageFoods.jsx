@@ -1,5 +1,5 @@
 // ================= FRONTEND =================
-// ✅ src/pages/admin/ManageFoods.jsx (ONLY UI / STYLING UPDATED)
+// src/pages/admin/ManageFoods.jsx (API FIXED)
 
 import { useEffect, useState } from "react";
 import { getToken } from "../../utils/getToken";
@@ -18,7 +18,7 @@ export default function ManageFoods() {
   }, []);
 
   const loadFoods = async () => {
-    const res = await fetch("http://localhost:5000/api/foods");
+    const res = await fetch("https://food-startup-1.onrender.com/api/foods");
     const data = await res.json();
     setFoods(data);
   };
@@ -47,7 +47,7 @@ export default function ManageFoods() {
     fd.append("description", form.description);
     fd.append("image", form.image);
 
-    await fetch("http://localhost:5000/api/foods", {
+    await fetch("https://food-startup-1.onrender.com/api/foods", {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
       body: fd,
@@ -61,7 +61,7 @@ export default function ManageFoods() {
     const token = await getToken();
     if (!window.confirm("Delete this food?")) return;
 
-    await fetch(`http://localhost:5000/api/foods/${id}`, {
+    await fetch(`https://food-startup-1.onrender.com/api/foods/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -114,7 +114,7 @@ export default function ManageFoods() {
         {foods.map((f) => (
           <div key={f._id} style={row}>
             <img
-              src={`http://localhost:5000/uploads/${f.image}`}
+              src={`https://food-startup-1.onrender.com/uploads/${f.image}`}
               alt={f.name}
               style={img}
             />

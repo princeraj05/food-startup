@@ -1,5 +1,5 @@
 // ================= FRONTEND =================
-// ✅ src/pages/admin/Contacts.jsx
+// src/pages/admin/Contacts.jsx
 // (PROFESSIONAL UI + INLINE STYLES)
 
 import { useEffect, useState } from "react";
@@ -15,7 +15,7 @@ export default function Contacts() {
 
   const loadContacts = async () => {
     const token = await getToken();
-    const res = await fetch("http://localhost:5000/api/admin/contacts", {
+    const res = await fetch("https://food-startup-1.onrender.com/api/admin/contacts", {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -24,7 +24,7 @@ export default function Contacts() {
 
   const sendReply = async (id) => {
     const token = await getToken();
-    await fetch(`http://localhost:5000/api/admin/contacts/${id}/reply`, {
+    await fetch(`https://food-startup-1.onrender.com/api/admin/contacts/${id}/reply`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
