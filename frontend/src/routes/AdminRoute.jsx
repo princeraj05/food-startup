@@ -5,23 +5,28 @@ export default function AdminRoute({ children }) {
 
   const token = localStorage.getItem("token");
 
+  // Agar token nahi hai → login page
   if (!token) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
   try {
 
     const decoded = jwtDecode(token);
 
-    if (decoded.role !== "admin") {
-      return <Navigate to="/user" />;
+    // Agar role admin nahi hai → user dashboard
+    if (decoded?.role !== "admin") {
+      return <Navigate to="/user" replace />;
     }
 
+    // Admin hai → page access
     return children;
 
-  } catch {
+  } catch (error) {
 
-    return <Navigate to="/login" />;
+    // Invalid token → login page
+    console.error("Invalid token:", error);
+    return <Navigate to="/login" replace />;
 
   }
 
