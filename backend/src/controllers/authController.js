@@ -1,13 +1,12 @@
 import User from "../models/User.js";
+import jwt from "jsonwebtoken";
 
 export const loginUser = async (req, res) => {
 
   const { uid, email, name } = req.user;
 
-  // check user
-  let user = await User.findOne({ uid });
+  let user = await User.findOne({ email });
 
-  // if not exist create
   if (!user) {
 
     user = await User.create({
@@ -19,8 +18,20 @@ export const loginUser = async (req, res) => {
 
   }
 
+  // ✅ TOKEN GENERATE
+  const token = jwt.sign(
+    {
+      id: user._id,
+      email: user.email,
+      role: user.role
+    },
+    "SECRET123",
+    { expiresIn: "7d" }
+  );
+
   res.json({
     success: true,
+    token,
     role: user.role
   });
 

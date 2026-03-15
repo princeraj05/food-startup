@@ -1,46 +1,44 @@
 import User from "../models/User.js";
-import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 /* ================= REGISTER ================= */
 
 export const registerUser = async (req, res) => {
+
   try {
 
     const { name, email, password } = req.body;
 
-    if (!name || !email || !password) {
-      return res.status(400).json({ message: "All fields required" });
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return res.status(400).json({
+        message: "User already exists"
+      });
     }
 
-    const exist = await User.findOne({ email });
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    if (exist) {
-      return res.status(400).json({ message: "User already exists" });
-    }
-
-    const hash = await bcrypt.hash(password, 10);
-
-    await User.create({
+    const user = await User.create({
       name,
       email,
-      password: hash,
-      role: "user"   // default role
+      password: hashedPassword
     });
 
-    res.status(201).json({
+    res.json({
+      success: true,
       message: "Registration successful"
     });
 
   } catch (err) {
 
-    console.error(err);
-
     res.status(500).json({
-      message: "Registration failed"
+      message: "Server error"
     });
 
   }
+
 };
 
 
@@ -55,18 +53,23 @@ export const loginUser = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(400).json({
+        message: "User not found"
+      });
     }
 
-    const match = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
 
-    if (!match) {
-      return res.status(401).json({ message: "Invalid password" });
+    if (!isMatch) {
+      return res.status(400).json({
+        message: "Invalid password"
+      });
     }
 
     const token = jwt.sign(
       {
         id: user._id,
+        email: user.email,
         role: user.role
       },
       "SECRET123",
@@ -74,16 +77,15 @@ export const loginUser = async (req, res) => {
     );
 
     res.json({
+      success: true,
       token,
       role: user.role
     });
 
   } catch (err) {
 
-    console.error(err);
-
     res.status(500).json({
-      message: "Login failed"
+      message: "Server error"
     });
 
   }
@@ -91,32 +93,20 @@ export const loginUser = async (req, res) => {
 };
 
 
-/* ================= GET USER ROLE ================= */
+/* ================= GET ME ================= */
 
 export const getMe = async (req, res) => {
 
   try {
 
-    const header = req.headers.authorization;
+    const user = await User.findById(req.user.id).select("-password");
 
-    if (!header || !header.startsWith("Bearer ")) {
-      return res.status(401).json({ message: "No token" });
-    }
-
-    const token = header.split(" ")[1];
-
-    const decoded = jwt.verify(token, "SECRET123");
-
-    const user = await User.findById(decoded.id).select("-password");
-
-    res.json({
-      role: user.role
-    });
+    res.json(user);
 
   } catch (err) {
 
-    res.status(401).json({
-      message: "Invalid token"
+    res.status(500).json({
+      message: "Server error"
     });
 
   }

@@ -1,47 +1,28 @@
 import { Navigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import jwt_decode from "jwt-decode";
 
 export default function AdminRoute({ children }) {
 
-  const [allowed, setAllowed] = useState(null);
+  const token = localStorage.getItem("token");
 
-  useEffect(() => {
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
 
-    const checkAdmin = async () => {
+  try {
 
-      const token = localStorage.getItem("token");
+    const decoded = jwt_decode(token);
 
-      if (!token) {
-        setAllowed(false);
-        return;
-      }
+    if (decoded.role !== "admin") {
+      return <Navigate to="/user" />;
+    }
 
-      try {
+    return children;
 
-        const res = await fetch(
-          "http://localhost:5000/api/users/me",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+  } catch {
 
-        const data = await res.json();
+    return <Navigate to="/login" />;
 
-        setAllowed(data.role === "admin");
+  }
 
-      } catch {
-        setAllowed(false);
-      }
-
-    };
-
-    checkAdmin();
-
-  }, []);
-
-  if (allowed === null) return null;
-
-  return allowed ? children : <Navigate to="/user" />;
 }
