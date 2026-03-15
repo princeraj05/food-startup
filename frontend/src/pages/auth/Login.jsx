@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
+const API = "https://food-startup-1.onrender.com"; // backend url
+
 export default function Login() {
 
   const [email, setEmail] = useState("");
@@ -14,19 +16,16 @@ export default function Login() {
 
     try {
 
-      const res = await fetch(
-        "https://food-startup-1.onrender.com/api/users/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            email,
-            password
-          })
-        }
-      );
+      const res = await fetch(`${API}/api/users/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email,
+          password
+        })
+      });
 
       const data = await res.json();
 
@@ -35,10 +34,8 @@ export default function Login() {
         return;
       }
 
-      // save token
       localStorage.setItem("token", data.token);
 
-      // redirect based on role
       if (data.role === "admin") {
         navigate("/admin");
       } else {
@@ -48,7 +45,7 @@ export default function Login() {
     } catch (err) {
 
       console.error(err);
-      alert("Login failed");
+      alert("Server error");
 
     }
 
@@ -96,7 +93,7 @@ export default function Login() {
 
 }
 
-/* ===== STYLES ===== */
+/* styles */
 
 const page={
   minHeight:"100vh",
@@ -116,9 +113,7 @@ const card={
 
 const title={
   textAlign:"center",
-  marginBottom:20,
-  color:"#111827",
-  fontWeight:600
+  marginBottom:20
 };
 
 const input={
@@ -126,8 +121,7 @@ const input={
   padding:12,
   marginBottom:12,
   borderRadius:8,
-  border:"1px solid #d1d5db",
-  fontSize:14
+  border:"1px solid #d1d5db"
 };
 
 const btn={
@@ -138,11 +132,10 @@ const btn={
   cursor:"pointer",
   fontWeight:"bold",
   background:"#111827",
-  color:"#ffffff"
+  color:"#fff"
 };
 
 const text={
   marginTop:12,
-  textAlign:"center",
-  color:"#374151"
+  textAlign:"center"
 };
