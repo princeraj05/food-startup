@@ -27,6 +27,7 @@ app.use(
       "http://localhost:5173",
       "https://food-startup-87cmt5e11-princes-projects-d7be7534.vercel.app"
     ],
+    methods: ["GET","POST","PUT","DELETE"],
     credentials: true
   })
 );
