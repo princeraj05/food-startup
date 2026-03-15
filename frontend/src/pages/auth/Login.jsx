@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
-const API = "http://localhost:5000";
+const API = "https://food-startup-1.onrender.com";
 
 export default function Login(){
 
