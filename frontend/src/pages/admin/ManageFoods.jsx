@@ -1,5 +1,6 @@
+
 import { useEffect, useState } from "react";
-import API from "../../api/axios"; // ✅ NEW
+import API from "../../api/axios";
 import { getToken } from "../../utils/getToken";
 
 export default function ManageFoods(){
@@ -54,9 +55,7 @@ export default function ManageFoods(){
       fd.append("image",form.image);
 
       await API.post("/api/foods", fd, {
-        headers:{
-          Authorization:`Bearer ${token}`
-        }
+        headers:{ Authorization:`Bearer ${token}` }
       });
 
       setForm({
@@ -80,9 +79,7 @@ export default function ManageFoods(){
       if(!window.confirm("Delete this food?")) return;
 
       await API.delete(`/api/foods/${id}`,{
-        headers:{
-          Authorization:`Bearer ${token}`
-        }
+        headers:{ Authorization:`Bearer ${token}` }
       });
 
       loadFoods();
@@ -94,75 +91,81 @@ export default function ManageFoods(){
 
   return(
 
-    <div style={page}>
+    <div className="max-w-6xl mx-auto px-4 py-6">
 
-      <h2 style={title}>🍔 Manage Foods</h2>
+      <h2 className="text-2xl font-bold mb-6">🍔 Manage Foods</h2>
 
       {/* ADD FOOD FORM */}
-
-      <form style={formBox} onSubmit={addFood}>
+      <form 
+        onSubmit={addFood}
+        className="bg-white p-6 rounded-2xl shadow-lg mb-8 space-y-4"
+      >
 
         <input
-          style={input}
           name="name"
           placeholder="Food name"
           value={form.name}
           onChange={handleChange}
+          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-400 outline-none"
         />
 
         <input
-          style={input}
           name="price"
           type="number"
           placeholder="Price"
           value={form.price}
           onChange={handleChange}
+          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-400 outline-none"
         />
 
         <textarea
-          style={textarea}
           name="description"
           placeholder="Description"
           value={form.description}
           onChange={handleChange}
+          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-400 outline-none"
         />
 
         <input
-          style={file}
           name="image"
           type="file"
           onChange={handleChange}
+          className="w-full"
         />
 
-        <button style={btn} type="submit">
+        <button 
+          type="submit"
+          className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition"
+        >
           Add Food
         </button>
 
       </form>
 
       {/* FOOD LIST */}
-
-      <div style={grid}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
         {foods.map(f=>(
 
-          <div key={f._id} style={card}>
+          <div 
+            key={f._id} 
+            className="bg-white p-4 rounded-2xl shadow-md hover:shadow-lg transition text-center"
+          >
 
-            {/* ✅ IMAGE FIX */}
             <img
               src={`${import.meta.env.VITE_API_URL}/uploads/${f.image}`}
-              style={image}
+              className="w-full h-40 object-cover rounded-lg mb-3"
             />
 
-            <h3>{f.name}</h3>
+            <h3 className="font-bold text-lg">{f.name}</h3>
 
-            <p style={desc}>{f.description}</p>
+            <p className="text-gray-500 text-sm">{f.description}</p>
 
-            <p style={price}>₹{f.price}</p>
+            <p className="font-semibold mt-2">₹{f.price}</p>
 
             <button
-              style={deleteBtn}
               onClick={()=>deleteFood(f._id)}
+              className="mt-3 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition"
             >
               Delete
             </button>
