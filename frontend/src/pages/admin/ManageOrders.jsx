@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import API from "../../api/axios"; // ✅ NEW
+import API from "../../api/axios";
 import { getToken } from "../../utils/getToken";
 
 export default function ManageOrders(){
@@ -20,7 +20,6 @@ export default function ManageOrders(){
       });
 
       setOrders(res.data);
-
     }catch(err){
       console.log(err);
     }
@@ -67,68 +66,68 @@ export default function ManageOrders(){
 
   return(
 
-    <div style={page}>
+    <div className="max-w-6xl mx-auto px-4 py-6">
 
-      <h2 style={title}>📦 Manage Orders</h2>
+      <h2 className="text-2xl font-bold mb-6">📦 Manage Orders</h2>
 
-      <div style={grid}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 
         {orders.map(o=>(
 
-          <div key={o._id} style={card}>
+          <div key={o._id} className="bg-white p-5 rounded-2xl shadow-md space-y-3">
 
-            <h3 style={orderId}>
+            <h3 className="font-bold text-lg">
               Order #{o._id.slice(-6)}
             </h3>
 
-            <p>
-              Status: <b>{o.status}</b>
+            <p className="text-sm">
+              Status: <span className="font-semibold">{o.status}</span>
             </p>
 
             <select
-              style={select}
               value={o.status}
               onChange={(e)=>setETA(o._id,e.target.value)}
+              className="w-full border p-2 rounded-lg"
             >
               <option>Pending</option>
               <option>Preparing</option>
               <option>Delivered</option>
             </select>
 
-            <p style={address}>
+            <p className="text-gray-600 text-sm">
               📍 {o.address}
             </p>
 
-            <p style={remainingText}>
+            <p className="text-sm">
               ⏱ Remaining: {remaining(o)}
             </p>
 
             {o.status!=="Delivered" && (
 
-              <div style={etaBox}>
+              <div className="flex gap-2">
 
                 <input
-                  style={input}
                   type="number"
-                  placeholder="ETA minutes"
+                  placeholder="ETA (min)"
                   value={etaInput[o._id] || ""}
                   onChange={(e)=>
                     setEtaInput({...etaInput,[o._id]:e.target.value})
                   }
+                  className="flex-1 border p-2 rounded-lg"
                 />
 
                 <button
-                  style={btn}
                   onClick={()=>setETA(o._id,o.status)}
+                  className="bg-green-600 hover:bg-green-700 text-white px-3 rounded-lg"
                 >
-                  Set ETA
+                  Set
                 </button>
 
               </div>
 
             )}
 
-            <div style={items}>
+            <div className="text-sm text-gray-700 space-y-1">
 
               {o.items.map((i,idx)=>(
                 <div key={idx}>
@@ -138,7 +137,7 @@ export default function ManageOrders(){
 
             </div>
 
-            <h4 style={total}>
+            <h4 className="font-bold text-right">
               Total ₹{o.total}
             </h4>
 
